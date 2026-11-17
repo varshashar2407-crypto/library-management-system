@@ -1,0 +1,174 @@
+.admin-register {
+  --reg-bg: #10151b;
+  --reg-panel: #171d24;
+  --reg-card: #1d242c;
+  --reg-line: rgba(241, 229, 207, 0.12);
+  --reg-green: #37a96b;
+  --reg-amber: #d5851f;
+  --reg-cream: #f1e5cf;
+  --reg-muted: #a9b2ac;
+
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  color: var(--reg-cream);
+  background:
+    radial-gradient(
+      ellipse at 80% 0%,
+      rgba(55, 169, 107, 0.12),
+      transparent 45%
+    ),
+    radial-gradient(
+      ellipse at 0% 100%,
+      rgba(213, 133, 31, 0.09),
+      transparent 45%
+    ),
+    var(--reg-bg);
+}
+
+.admin-register *,
+.admin-register *::before,
+.admin-register *::after {
+  box-sizing: border-box;
+}
+
+.admin-register-card {
+  width: min(440px, 100%);
+  padding: 30px;
+  border: 1px solid var(--reg-line);
+  border-radius: 10px;
+  background: var(--reg-card);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+}
+
+.admin-register-eyebrow {
+  margin: 0 0 10px;
+  color: var(--reg-green);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+}
+
+.admin-register-card h1 {
+  margin: 0 0 10px;
+  font-family: Georgia, serif;
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.admin-register-card h1 em {
+  color: var(--reg-amber);
+}
+
+.admin-register-note {
+  margin: 0 0 18px;
+  color: var(--reg-muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.admin-register-message {
+  padding: 12px 14px;
+  margin: 0 0 16px;
+  border: 1px solid;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.admin-register-message-success {
+  color: #b7e8c8;
+  border-color: rgba(55, 169, 107, 0.45);
+  background: rgba(55, 169, 107, 0.12);
+}
+
+.admin-register-message-error {
+  color: #f0c6ae;
+  border-color: rgba(224, 143, 99, 0.45);
+  background: rgba(156, 78, 47, 0.14);
+}
+
+.admin-register form {
+  display: grid;
+  gap: 14px;
+}
+
+.admin-register label {
+  display: grid;
+  gap: 7px;
+  color: var(--reg-muted);
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.admin-register input {
+  padding: 12px 14px;
+  border: 1px solid var(--reg-line);
+  border-radius: 6px;
+  background: #141a20;
+  color: var(--reg-cream);
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.admin-register input:focus {
+  outline: none;
+  border-color: var(--reg-green);
+}
+
+.admin-register button[type="submit"] {
+  margin-top: 6px;
+  padding: 13px;
+  border: none;
+  border-radius: 6px;
+  background: var(--reg-amber);
+  color: #20170e;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-register button[type="submit"]:hover {
+  background: #e59b3c;
+}
+
+.admin-register footer {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 13px;
+}
+
+.admin-register footer a {
+  color: var(--reg-amber);
+  text-decoration: none;
+}
+
+.admin-register footer a:hover {
+  text-decoration: underline;
+}
+.admin-register-password {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.admin-register-password input {
+  width: 100%;
+  padding-right: 44px;
+}
+
+.admin-register-eye {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  padding: 4px;
+  color: var(--reg-muted);
+  cursor: pointer;
+}
+
+.admin-register-eye:hover {
+  color: var(--reg-cream);
+}

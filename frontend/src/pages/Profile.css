@@ -1,0 +1,1416 @@
+.profile-constellation {
+  --pc-green: #37a96b;
+  --pc-amber: #d5851f;
+  --pc-walnut: #5a3e2b;
+  --pc-cream: #f1e5cf;
+  --pc-muted: #b7bcac;
+  --pc-border: rgba(241, 229, 207, 0.14);
+
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 35px 20px;
+  overflow: hidden;
+  color: var(--pc-cream);
+  background:
+    radial-gradient(
+      ellipse at 70% 10%,
+      rgba(55, 169, 107, 0.16),
+      transparent 45%
+    ),
+    radial-gradient(
+      ellipse at 10% 100%,
+      rgba(90, 62, 43, 0.22),
+      transparent 45%
+    ),
+    #0d130f;
+}
+
+.profile-constellation *,
+.profile-constellation *::before,
+.profile-constellation *::after {
+  box-sizing: border-box;
+}
+
+/* Orbit background */
+.profile-orbit {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border: 1px solid rgba(213, 133, 31, 0.16);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.profile-orbit-one {
+  width: min(760px, 95vw);
+  height: min(760px, 95vw);
+}
+
+.profile-orbit-two {
+  width: min(1050px, 125vw);
+  height: min(1050px, 125vw);
+  border-color: rgba(55, 169, 107, 0.12);
+}
+
+.profile-orbit-three {
+  width: min(1350px, 155vw);
+  height: min(1350px, 155vw);
+  border-color: rgba(241, 229, 207, 0.07);
+}
+
+.profile-star {
+  position: absolute;
+  color: var(--pc-amber);
+  pointer-events: none;
+}
+
+.profile-star-one {
+  top: 12%;
+  left: 15%;
+  font-size: 32px;
+}
+
+.profile-star-two {
+  top: 22%;
+  right: 18%;
+  font-size: 24px;
+  color: var(--pc-green);
+}
+
+.profile-star-three {
+  bottom: 15%;
+  left: 22%;
+  font-size: 28px;
+}
+
+/* Main panel */
+.profile-panel {
+  position: relative;
+  z-index: 2;
+  width: min(880px, 100%);
+  padding: 38px;
+  border: 1px solid var(--pc-border);
+  border-radius: 12px;
+  background: rgba(18, 26, 21, 0.92);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+}
+
+.profile-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 25px;
+  padding-bottom: 28px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--pc-border);
+}
+
+.profile-identity {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-width: 0;
+}
+
+.profile-avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 82px;
+  height: 82px;
+  border: 1px solid rgba(213, 133, 31, 0.5);
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle at 30% 25%,
+      rgba(55, 169, 107, 0.35),
+      #17211a
+    );
+  box-shadow: 0 0 0 7px rgba(55, 169, 107, 0.08);
+}
+
+.profile-avatar span {
+  font-family: Georgia, serif;
+  font-size: 30px;
+  color: var(--pc-cream);
+}
+
+.profile-eyebrow {
+  margin: 0 0 10px;
+  color: var(--pc-green);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 3px;
+}
+
+.profile-head h1 {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -1.2px;
+  overflow-wrap: anywhere;
+}
+
+.profile-location {
+  margin: 10px 0 0;
+  color: var(--pc-muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+/* Fingerprint */
+.profile-fingerprint {
+  flex-shrink: 0;
+  padding: 18px;
+  border: 1px dashed rgba(213, 133, 31, 0.4);
+  border-radius: 8px;
+  background: rgba(213, 133, 31, 0.07);
+  text-align: center;
+}
+
+.profile-fingerprint > span {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--pc-muted);
+  font-size: 8px;
+  letter-spacing: 2px;
+}
+
+.profile-fingerprint-lines {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+
+.profile-fingerprint-lines i {
+  display: block;
+  width: 4px;
+  border-radius: 3px;
+  background: var(--pc-amber);
+}
+
+.profile-fingerprint-lines i:nth-child(1) {
+  height: 20px;
+  opacity: 0.5;
+}
+
+.profile-fingerprint-lines i:nth-child(2) {
+  height: 34px;
+}
+
+.profile-fingerprint-lines i:nth-child(3) {
+  height: 46px;
+}
+
+.profile-fingerprint-lines i:nth-child(4) {
+  height: 30px;
+  opacity: 0.7;
+}
+
+.profile-fingerprint-lines i:nth-child(5) {
+  height: 18px;
+  opacity: 0.5;
+}
+
+.profile-fingerprint strong {
+  font-family: Georgia, serif;
+  font-size: 15px;
+  color: #f3cf9a;
+}
+
+/* Constellation map */
+.profile-constellation-map {
+  position: relative;
+  min-height: 250px;
+  margin-bottom: 30px;
+  border: 1px solid var(--pc-border);
+  border-radius: 10px;
+  background:
+    radial-gradient(
+      ellipse at 50% 50%,
+      rgba(55, 169, 107, 0.1),
+      transparent 60%
+    ),
+    #111a14;
+}
+
+.constellation-node {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--pc-border);
+  border-radius: 50%;
+  background: #18221b;
+  color: var(--pc-muted);
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  text-align: center;
+}
+
+.constellation-center {
+  left: 50%;
+  top: 50%;
+  width: 82px;
+  height: 82px;
+  transform: translate(-50%, -50%);
+  border-color: rgba(213, 133, 31, 0.55);
+  background: rgba(213, 133, 31, 0.12);
+  color: #f3cf9a;
+  box-shadow: 0 0 0 9px rgba(213, 133, 31, 0.08);
+}
+
+.constellation-node-one {
+  left: 18%;
+  top: 22%;
+  width: 72px;
+  height: 72px;
+}
+
+.constellation-node-two {
+  right: 18%;
+  top: 25%;
+  width: 78px;
+  height: 78px;
+}
+
+.constellation-node-three {
+  left: 22%;
+  bottom: 18%;
+  width: 70px;
+  height: 70px;
+}
+
+.constellation-node-four {
+  right: 22%;
+  bottom: 20%;
+  width: 74px;
+  height: 74px;
+}
+
+.constellation-line {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(55, 169, 107, 0.55),
+    rgba(213, 133, 31, 0.35)
+  );
+}
+
+.constellation-line-one {
+  left: 26%;
+  top: 34%;
+  width: 22%;
+  transform: rotate(18deg);
+}
+
+.constellation-line-two {
+  right: 26%;
+  top: 38%;
+  width: 22%;
+  transform: rotate(-16deg);
+}
+
+.constellation-line-three {
+  left: 33%;
+  bottom: 30%;
+  width: 34%;
+  transform: rotate(-6deg);
+}
+
+/* Badges */
+.profile-badges {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.profile-badge {
+  padding: 20px;
+  border: 1px solid var(--pc-border);
+  border-radius: 7px;
+  background: #17211a;
+}
+
+.profile-badge > span {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--pc-amber);
+  font-size: 22px;
+}
+
+.profile-badge strong {
+  display: block;
+  margin-bottom: 7px;
+  font-family: Georgia, serif;
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.profile-badge p {
+  margin: 0;
+  color: var(--pc-muted);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+/* Actions */
+.profile-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 13px;
+}
+
+.profile-action-primary,
+.profile-action-secondary {
+  padding: 13px 22px;
+  border-radius: 5px;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.profile-action-primary {
+  border: 1px solid transparent;
+  background: var(--pc-amber);
+  color: #20170e;
+  font-weight: 700;
+}
+
+.profile-action-primary:hover {
+  background: #e59b3c;
+}
+
+.profile-action-secondary {
+  border: 1px solid var(--pc-border);
+  color: var(--pc-cream);
+}
+
+.profile-action-secondary:hover {
+  border-color: rgba(213, 133, 31, 0.55);
+}
+
+.profile-constellation a:focus-visible {
+  outline: 2px solid var(--pc-amber);
+  outline-offset: 4px;
+}
+
+/* Responsive */
+@media (max-width: 780px) {
+  .profile-panel {
+    padding: 28px 20px;
+  }
+
+  .profile-head {
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .profile-identity {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .profile-constellation-map {
+    min-height: 300px;
+  }
+
+  .constellation-node-one {
+    left: 8%;
+  }
+
+  .constellation-node-two {
+    right: 8%;
+  }
+
+  .constellation-node-three {
+    left: 10%;
+  }
+
+  .constellation-node-four {
+    right: 10%;
+  }
+
+  .profile-badges {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-actions {
+    flex-direction: column;
+  }
+
+  .profile-action-primary,
+  .profile-action-secondary {
+    text-align: center;
+  }
+}
+
+/* Premium golden look — only for Premium members */
+.profile-constellation.premium-profile {
+  background:
+    radial-gradient(
+      ellipse at 70% 10%,
+      rgba(255, 215, 0, 0.20),
+      transparent 45%
+    ),
+    radial-gradient(
+      ellipse at 10% 100%,
+      rgba(212, 175, 55, 0.18),
+      transparent 45%
+    ),
+    #171207;
+}
+
+.profile-constellation.premium-profile .profile-panel {
+  border: 1px solid rgba(255, 215, 0, 0.45);
+  background: rgba(32, 24, 8, 0.94);
+  box-shadow:
+    0 30px 60px rgba(0, 0, 0, 0.45),
+    0 0 35px rgba(255, 215, 0, 0.18);
+}
+
+.profile-constellation.premium-profile .profile-avatar {
+  border-color: rgba(255, 215, 0, 0.75);
+  background:
+    radial-gradient(
+      circle at 30% 25%,
+      rgba(255, 215, 0, 0.35),
+      #241a05
+    );
+  box-shadow: 0 0 0 7px rgba(255, 215, 0, 0.10);
+}
+
+.profile-constellation.premium-profile .profile-eyebrow {
+  color: #ffd700;
+}
+
+.profile-constellation.premium-profile .profile-location {
+  color: #e8d9a8;
+}
+
+.profile-constellation.premium-profile .profile-fingerprint {
+  border-color: rgba(255, 215, 0, 0.55);
+  background: rgba(255, 215, 0, 0.08);
+}
+
+.profile-constellation.premium-profile .profile-fingerprint strong {
+  color: #ffe28a;
+}
+
+.profile-constellation.premium-profile .profile-badge {
+  border-color: rgba(255, 215, 0, 0.35);
+  background: #241c08;
+}
+
+.profile-constellation.premium-profile .profile-badge > span {
+  color: #ffd700;
+}
+
+.profile-constellation.premium-profile .profile-action-primary {
+  background: linear-gradient(90deg, #ffd700, #e6b422);
+  color: #241a05;
+}
+
+.profile-constellation.premium-profile .profile-action-primary:hover {
+  background: #ffe066;
+}
+
+/* Premium membership card */
+.premium-membership-card {
+  margin-bottom: 28px;
+  padding: 20px;
+  border: 1px solid rgba(255, 215, 0, 0.5);
+  border-radius: 10px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 215, 0, 0.14),
+    rgba(255, 215, 0, 0.05)
+  );
+}
+
+.premium-membership-card h3 {
+  margin: 0 0 8px;
+  color: #ffd700;
+  font-family: Georgia, serif;
+  font-size: 20px;
+}
+
+.premium-membership-card p {
+  margin: 0;
+  color: #e8d9a8;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* Premium badge near name */
+.premium-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  margin-left: 14px;
+  padding: 7px 14px;
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+
+  color: #241a05;
+  background: linear-gradient(90deg, #ffd700, #f0c14b);
+  border: 1px solid #e6a700;
+  border-radius: 999px;
+
+  vertical-align: middle;
+  box-shadow: 0 4px 16px rgba(255, 215, 0, 0.4);
+}
+
+.premium-badge::before {
+  content: "⭐";
+  font-size: 13px;
+}
+
+/* Basic membership card */
+.basic-membership-card {
+  margin-bottom: 28px;
+  padding: 20px;
+  border: 1px solid var(--pc-border);
+  border-radius: 10px;
+  background: #17211a;
+}
+
+.basic-membership-card h3 {
+  margin: 0 0 8px;
+  color: var(--pc-cream);
+  font-family: Georgia, serif;
+  font-size: 20px;
+}
+
+.basic-membership-card p {
+  margin: 0;
+  color: var(--pc-muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* Clickable Reading Room */
+.profile-constellation .profile-reading-link {
+  display: block;
+  color: var(--pc-cream);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.profile-constellation .profile-reading-link:hover {
+  transform: translateY(-4px);
+  border-color: var(--pc-amber);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+}
+
+.profile-constellation .profile-badge .profile-card-link {
+  display: inline-block;
+  margin: 16px 0 0;
+  color: var(--pc-amber);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: normal;
+  text-decoration: none;
+}
+
+.profile-constellation .profile-card-link:hover {
+  text-decoration: underline;
+}
+
+/* Account security */
+.profile-constellation .profile-security-email {
+  margin-top: 16px;
+  padding: 12px;
+  border: 1px solid var(--pc-border);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.profile-constellation .profile-security-email small {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--pc-muted);
+  font-size: 9px;
+  letter-spacing: 1.4px;
+}
+
+.profile-constellation .profile-security-email span {
+  display: block;
+  color: var(--pc-cream);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.profile-constellation .profile-security-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.profile-constellation .profile-security-link {
+  color: var(--pc-amber);
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.profile-constellation .profile-security-link:hover {
+  text-decoration: underline;
+}
+
+.profile-constellation .profile-security-logout {
+  width: auto;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 138, 128, 0.35);
+  border-radius: 5px;
+  background: transparent;
+  color: #ffaaa2;
+  font: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.profile-constellation .profile-security-logout:hover {
+  background: rgba(255, 138, 128, 0.1);
+}
+
+/* Fix the existing bottom Logout button */
+.profile-constellation button.profile-action-secondary {
+  width: auto;
+  background: transparent;
+  color: var(--pc-cream);
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* Premium accents */
+.profile-constellation.premium-profile
+  .profile-badge
+  .profile-card-link,
+.profile-constellation.premium-profile
+  .profile-security-link {
+  color: #ffd700;
+}
+
+.profile-constellation.premium-profile
+  .profile-reading-link:hover {
+  border-color: #ffd700;
+  box-shadow: 0 10px 24px rgba(255, 215, 0, 0.1);
+}
+
+/* Edit profile button */
+.profile-constellation .profile-edit-button {
+  flex-shrink: 0;
+  width: auto;
+  align-self: flex-start;
+  padding: 10px 14px;
+  border: 1px solid var(--pc-border);
+  border-radius: 7px;
+  background: transparent;
+  color: var(--pc-cream);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.profile-constellation .profile-edit-button:hover {
+  border-color: var(--pc-amber);
+  background: rgba(213, 133, 31, 0.1);
+}
+
+.profile-constellation.premium-profile .profile-edit-button {
+  border-color: rgba(255, 215, 0, 0.45);
+  color: #ffd700;
+}
+
+@media (max-width: 780px) {
+  .profile-constellation .profile-edit-button {
+    align-self: center;
+  }
+}
+
+/* Edit profile form */
+.profile-constellation .profile-edit-form {
+  margin-bottom: 28px;
+  padding: 24px;
+  border: 1px solid var(--pc-border);
+  border-radius: 10px;
+  background: #17211a;
+}
+
+.profile-constellation .profile-edit-form h2 {
+  margin: 0 0 20px;
+  color: var(--pc-cream);
+  font-family: Georgia, serif;
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.profile-constellation .profile-edit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.profile-constellation .profile-edit-grid label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.profile-constellation .profile-edit-grid label > span {
+  color: var(--pc-muted);
+  font-size: 12px;
+}
+
+.profile-constellation .profile-edit-grid input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--pc-border);
+  border-radius: 6px;
+  background: #0d130f;
+  color: var(--pc-cream);
+  font: inherit;
+  font-size: 14px;
+}
+
+.profile-constellation .profile-edit-grid input:focus {
+  outline: 2px solid var(--pc-amber);
+  outline-offset: 2px;
+}
+
+.profile-constellation .profile-edit-grid input[readonly] {
+  opacity: 0.65;
+}
+
+.profile-constellation .profile-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.profile-constellation .profile-edit-actions button {
+  width: auto;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.profile-constellation button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.profile-constellation .profile-edit-message {
+  margin: 0 0 20px;
+  padding: 12px 16px;
+  border: 1px solid;
+  border-radius: 7px;
+  font-size: 13px;
+}
+
+.profile-constellation .profile-edit-message-success {
+  border-color: rgba(55, 169, 107, 0.5);
+  background: rgba(55, 169, 107, 0.1);
+  color: #a4edbf;
+}
+
+.profile-constellation .profile-edit-message-error {
+  border-color: rgba(255, 138, 128, 0.5);
+  background: rgba(255, 138, 128, 0.1);
+  color: #ffaaa2;
+}
+
+.profile-constellation.premium-profile .profile-edit-form {
+  border-color: rgba(255, 215, 0, 0.35);
+  background: #241c08;
+}
+
+@media (max-width: 600px) {
+  .profile-constellation .profile-edit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-constellation .profile-edit-form {
+    padding: 18px;
+  }
+}
+/* =====================================================
+   LibriFolio profile — reference layout overrides
+   Add AFTER all existing Profile.css styles.
+   ===================================================== */
+
+.profile-constellation {
+  min-height: 100vh;
+  display: block;
+  padding: 26px 4.5vw 24px;
+  font-family: Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(
+      ellipse at 78% 10%,
+      rgba(55, 169, 107, 0.1),
+      transparent 46%
+    ),
+    radial-gradient(
+      ellipse at 5% 100%,
+      rgba(90, 62, 43, 0.16),
+      transparent 44%
+    ),
+    #0d130f;
+}
+
+/* Main panel */
+.profile-constellation .profile-panel {
+  width: min(1100px, 100%);
+  margin: 0;
+  padding: 25px 48px 18px;
+  border-radius: 0;
+  box-shadow: none;
+  background: rgba(18, 26, 21, 0.88);
+}
+
+/* Header */
+.profile-constellation .profile-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: start;
+  gap: 24px;
+  padding-bottom: 36px;
+  margin-bottom: 35px;
+}
+
+.profile-constellation .profile-identity {
+  gap: 25px;
+  align-items: center;
+}
+
+.profile-constellation .profile-identity > div:last-child {
+  min-width: 0;
+}
+
+.profile-constellation .profile-avatar {
+  width: 103px;
+  height: 103px;
+}
+
+.profile-constellation .profile-avatar span {
+  font-size: 38px;
+  font-weight: 700;
+}
+
+.profile-constellation .profile-eyebrow {
+  margin: 0 0 12px;
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 3.5px;
+}
+
+.profile-constellation .profile-head h1 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(40px, 4.2vw, 64px);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -1.5px;
+}
+
+.profile-constellation .profile-location {
+  margin-top: 14px;
+  font-size: 14px;
+  line-height: 1.85;
+  overflow-wrap: anywhere;
+}
+
+.profile-constellation .profile-edit-button {
+  justify-self: center;
+  align-self: start;
+  min-height: 47px;
+  margin: 0;
+  padding: 12px 18px;
+  border-radius: 9px;
+  font-size: 14px;
+}
+
+/* Member-ID badge */
+.profile-constellation .profile-fingerprint {
+  justify-self: end;
+  width: 123px;
+  min-height: 176px;
+  padding: 24px 12px 20px;
+  border-radius: 11px;
+}
+
+.profile-constellation .profile-fingerprint > span {
+  margin-bottom: 15px;
+  font-size: 9px;
+  line-height: 1.4;
+  letter-spacing: 2.5px;
+}
+
+.profile-constellation .profile-fingerprint-lines {
+  height: 58px;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.profile-constellation .profile-fingerprint-lines i {
+  width: 5px;
+}
+
+.profile-constellation .profile-fingerprint-lines i:nth-child(1) {
+  height: 25px;
+}
+
+.profile-constellation .profile-fingerprint-lines i:nth-child(2) {
+  height: 43px;
+}
+
+.profile-constellation .profile-fingerprint-lines i:nth-child(3) {
+  height: 58px;
+}
+
+.profile-constellation .profile-fingerprint-lines i:nth-child(4) {
+  height: 38px;
+}
+
+.profile-constellation .profile-fingerprint-lines i:nth-child(5) {
+  height: 23px;
+}
+
+.profile-constellation .profile-fingerprint strong {
+  display: block;
+  font-size: 20px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+/* Membership banner */
+.profile-constellation .basic-membership-card,
+.profile-constellation .premium-membership-card {
+  margin-bottom: 35px;
+  padding: 24px;
+  border-radius: 13px;
+}
+
+.profile-constellation .basic-membership-card h3,
+.profile-constellation .premium-membership-card h3 {
+  margin: 0 0 10px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 28px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.profile-constellation .basic-membership-card p,
+.profile-constellation .premium-membership-card p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* Three main cards */
+.profile-constellation .profile-badges {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 20px;
+  margin-bottom: 35px;
+}
+
+.profile-constellation .profile-badge {
+  min-width: 0;
+  min-height: 340px;
+  padding: 29px 24px 24px;
+  border-radius: 10px;
+}
+
+.profile-constellation .profile-badge > span:first-child {
+  display: block;
+  margin: 0 0 16px;
+  font-size: 27px;
+  line-height: 1.2;
+}
+
+.profile-constellation .profile-badge > strong {
+  display: block;
+  margin: 0 0 10px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+.profile-constellation .profile-badge p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.profile-constellation .profile-badge .profile-card-link {
+  display: inline-block;
+  margin: 20px 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+/* Security card */
+.profile-constellation .profile-security-email {
+  margin-top: 20px;
+  padding: 16px 14px;
+  border-radius: 8px;
+}
+
+.profile-constellation .profile-security-email small {
+  margin-bottom: 9px;
+  font-size: 10px;
+  line-height: 1.3;
+  letter-spacing: 1.6px;
+}
+
+.profile-constellation .profile-security-email span {
+  font-size: 14px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.profile-constellation .profile-security-actions {
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.profile-constellation .profile-security-link {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.profile-constellation .profile-security-logout {
+  min-height: 40px;
+  padding: 9px 15px;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+/* Bottom action row */
+.profile-constellation .profile-actions {
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.profile-constellation .profile-action-primary,
+.profile-constellation .profile-action-secondary {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 55px;
+  padding: 16px 28px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+}
+
+.profile-constellation button.profile-action-secondary {
+  width: auto;
+}
+
+/* Decorative background */
+.profile-constellation .profile-orbit-one {
+  width: 950px;
+  height: 950px;
+}
+
+.profile-constellation .profile-orbit-two {
+  width: 1310px;
+  height: 1310px;
+}
+
+.profile-constellation .profile-orbit-three {
+  width: 1685px;
+  height: 1685px;
+}
+
+.profile-constellation .profile-star-two {
+  right: 20%;
+  top: 20%;
+  font-size: 30px;
+}
+
+/* Membership labels beside the name */
+.profile-constellation .premium-badge,
+.profile-constellation .student-premium-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 12px;
+  padding: 7px 12px;
+  border: 1px solid rgba(213, 133, 31, 0.5);
+  border-radius: 999px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 1px;
+  vertical-align: middle;
+}
+
+.profile-constellation .student-premium-badge {
+  color: #f3cf9a;
+  background: rgba(213, 133, 31, 0.12);
+}
+
+/* The JSX already contains a star in the premium label. */
+.profile-constellation .premium-badge::before {
+  content: none;
+}
+
+/* Keyboard focus */
+.profile-constellation button:focus-visible,
+.profile-constellation a:focus-visible {
+  outline: 2px solid var(--pc-amber);
+  outline-offset: 4px;
+}
+
+/* Medium screens */
+@media (max-width: 1100px) {
+  .profile-constellation {
+    padding: 24px;
+  }
+
+  .profile-constellation .profile-panel {
+    margin-inline: auto;
+    padding: 30px;
+  }
+
+  .profile-constellation .profile-head {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .profile-constellation .profile-edit-button {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+    margin-left: 128px;
+  }
+
+  .profile-constellation .profile-fingerprint {
+    grid-column: 2;
+    grid-row: 1 / 3;
+  }
+
+  .profile-constellation .profile-badge {
+    padding: 24px 18px;
+  }
+
+  .profile-constellation .profile-badge > strong {
+    font-size: 22px;
+  }
+}
+
+/* Tablets and phones */
+@media (max-width: 780px) {
+  .profile-constellation {
+    padding: 20px 16px;
+  }
+
+  .profile-constellation .profile-panel {
+    padding: 28px 20px;
+    border-radius: 12px;
+  }
+
+  .profile-constellation .profile-head {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    padding-bottom: 28px;
+    margin-bottom: 28px;
+    text-align: center;
+  }
+
+  .profile-constellation .profile-identity {
+    flex-direction: column;
+    gap: 22px;
+    width: 100%;
+  }
+
+  .profile-constellation .profile-head h1 {
+    font-size: 46px;
+  }
+
+  .profile-constellation .profile-location {
+    font-size: 14px;
+  }
+
+  .profile-constellation .profile-edit-button {
+    align-self: center;
+    margin: 0;
+  }
+
+  .profile-constellation .profile-fingerprint {
+    align-self: center;
+  }
+
+  .profile-constellation .profile-badges {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+
+  .profile-constellation .profile-badge {
+    min-height: 0;
+    padding: 26px 24px;
+  }
+
+  .profile-constellation .basic-membership-card,
+  .profile-constellation .premium-membership-card {
+    margin-bottom: 28px;
+  }
+
+  .profile-constellation .basic-membership-card h3,
+  .profile-constellation .premium-membership-card h3 {
+    font-size: 25px;
+  }
+
+  .profile-constellation .profile-actions {
+    flex-direction: column;
+  }
+
+  .profile-constellation .profile-actions > * {
+    width: 100%;
+  }
+
+  .profile-constellation .premium-badge,
+  .profile-constellation .student-premium-badge {
+    margin: 12px 0 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .profile-constellation {
+    padding: 16px 10px;
+  }
+
+  .profile-constellation .profile-panel {
+    padding: 24px 16px;
+  }
+
+  .profile-constellation .profile-badge {
+    padding: 24px 18px;
+  }
+
+  .profile-constellation .profile-security-actions {
+    gap: 12px;
+  }
+}
+/* Profile dropdown menu */
+.profile-menu {
+  position: relative;
+}
+
+.profile-menu-trigger {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--pc-cream);
+  text-align: left;
+}
+
+.profile-menu-trigger .profile-avatar {
+  width: 103px;
+  height: 103px;
+  border: 1px solid rgba(213, 133, 31, 0.5);
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle at 30% 25%,
+      rgba(55, 169, 107, 0.35),
+      #17211a
+    );
+  box-shadow: 0 0 0 7px rgba(55, 169, 107, 0.08);
+}
+
+.profile-menu-trigger .profile-avatar span {
+  font-family: Georgia, serif;
+  font-size: 38px;
+  font-weight: 700;
+  color: var(--pc-cream);
+}
+
+.profile-menu-name {
+  font-family: Georgia, serif;
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.profile-menu-dropdown {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 12px);
+  min-width: 200px;
+  padding: 8px;
+  border: 1px solid var(--pc-border);
+  border-radius: 12px;
+  background: #122018;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+  z-index: 100;
+}
+
+.profile-menu-dropdown button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--pc-cream);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.profile-menu-dropdown button:hover {
+  background: rgba(55, 169, 107, 0.18);
+}
+
+.profile-menu-logout {
+  color: #ff8a8a !important;
+}
+
+.profile-menu-logout:hover {
+  background: rgba(255, 138, 138, 0.14) !important;
+}
