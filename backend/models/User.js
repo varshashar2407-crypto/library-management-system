@@ -41,6 +41,11 @@ const userSchema = new mongoose.Schema(
       default: "member"
     },
 
+    library: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Library"
+    },
+
     area: {
       type: String,
       required: [true, "Area is required."],

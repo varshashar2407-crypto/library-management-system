@@ -449,3 +449,32 @@
     gap: 10px;
   }
 }
+.books-library-info {
+  margin: 12px 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(185, 220, 153, 0.2);
+  border-radius: 8px;
+  background: rgba(185, 220, 153, 0.05);
+}
+
+.books-library-info .books-library {
+  margin: 0 0 6px;
+  color: #b9dc99;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.books-library-location {
+  margin: 0 0 6px;
+  color: #c4cdc5;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.books-library-id {
+  margin: 0;
+  color: #a4afa6;
+  font-family: monospace;
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}

@@ -28,7 +28,36 @@ router.get("/my", protect, async (req, res) => {
   }
 });
 
+// GET /api/issues/requests
+// Admin pending issue requests dekhega
+router.get("/requests", protect, async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({
+        message: "Only library admins can view requests."
+      });
+    }
+
+    const requests = await IssuedBook.find({
+      library: req.user.library,
+      status: "requested"
+    })
+      .sort({ createdAt: -1 })
+      .populate("user", "name email")
+      .populate("book", "title author category")
+      .populate("library", "name");
+
+    res.json(requests);
+  } catch (error) {
+    console.error("Get issue requests error:", error);
+    res.status(500).json({
+      message: "Issue requests could not be loaded."
+    });
+  }
+});
+
 // POST /api/issues
+// User issue request bhejta hai. Admin approval ke baad book issue hogi.
 router.post("/", protect, async (req, res) => {
   try {
     const { bookId, libraryId } = req.body;
@@ -51,49 +80,150 @@ router.post("/", protect, async (req, res) => {
       });
     }
 
-    const alreadyIssued = await IssuedBook.findOne({
+    const existingRequest = await IssuedBook.findOne({
       user: req.user._id,
       book: bookId,
       library: libraryId,
-      status: "issued"
+      status: { $in: ["requested", "issued"] }
     });
 
-    if (alreadyIssued) {
+    if (existingRequest) {
       return res.status(400).json({
-        message: "You have already issued this book."
+        message:
+          existingRequest.status === "requested"
+            ? "Your issue request is already pending."
+            : "You have already issued this book."
       });
     }
 
-    const dueDate = new Date();
-    dueDate.setDate(dueDate.getDate() + ISSUE_DAYS);
-
-    const issuedBook = await IssuedBook.create({
+    const issueRequest = await IssuedBook.create({
       user: req.user._id,
       book: bookId,
       library: libraryId,
-      status: "issued",
+      status: "requested",
       issueDate: new Date(),
-      dueDate,
       reissueCount: 0,
       fine: 0
     });
 
-    await Book.findByIdAndUpdate(bookId, {
-      $inc: { availableCopies: -1 }
-    });
-
-    const populatedIssue = await IssuedBook.findById(issuedBook._id)
+    const populatedRequest = await IssuedBook.findById(
+      issueRequest._id
+    )
       .populate("book", "title author category coverImage")
       .populate("library", "name address city");
 
     res.status(201).json({
-      message: "Book issued successfully.",
+      message: "Issue request sent to library admin.",
+      issue: populatedRequest
+    });
+  } catch (error) {
+    console.error("Create issue request error:", error);
+    res.status(500).json({
+      message: "Could not send issue request."
+    });
+  }
+});
+
+// PATCH /api/issues/:id/approve
+router.patch("/:id/approve", protect, async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({
+        message: "Only library admins can approve requests."
+      });
+    }
+
+    const issueRequest = await IssuedBook.findOne({
+      _id: req.params.id,
+      library: req.user.library,
+      status: "requested"
+    }).populate("book");
+
+    if (!issueRequest) {
+      return res.status(404).json({
+        message: "Issue request not found or already processed."
+      });
+    }
+
+    const book = await Book.findById(issueRequest.book._id);
+
+    if (!book || book.availableCopies <= 0) {
+      issueRequest.status = "returned";
+      issueRequest.adminRemark = "Book is no longer available.";
+      await issueRequest.save();
+
+      return res.status(400).json({
+        message: "This book is no longer available."
+      });
+    }
+
+    const issueDate = new Date();
+    const dueDate = new Date(issueDate);
+    dueDate.setDate(dueDate.getDate() + ISSUE_DAYS);
+
+    issueRequest.status = "issued";
+    issueRequest.issueDate = issueDate;
+    issueRequest.dueDate = dueDate;
+
+    await issueRequest.save();
+
+    await Book.findByIdAndUpdate(book._id, {
+      $inc: { availableCopies: -1 }
+    });
+
+    const populatedIssue = await IssuedBook.findById(
+      issueRequest._id
+    )
+      .populate("book", "title author category coverImage")
+      .populate("library", "name address city");
+
+    res.json({
+      message: "Issue request approved successfully.",
       issue: populatedIssue
     });
   } catch (error) {
-    console.error("Issue book error:", error);
+    console.error("Approve issue request error:", error);
     res.status(500).json({
-      message: "Could not issue this book."
+      message: "Could not approve this request."
+    });
+  }
+});
+
+// PATCH /api/issues/:id/reject
+router.patch("/:id/reject", protect, async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({
+        message: "Only library admins can reject requests."
+      });
+    }
+
+    const issueRequest = await IssuedBook.findOne({
+      _id: req.params.id,
+      library: req.user.library,
+      status: "requested"
+    });
+
+    if (!issueRequest) {
+      return res.status(404).json({
+        message: "Issue request not found or already processed."
+      });
+    }
+
+    issueRequest.status = "returned";
+    issueRequest.adminRemark =
+      req.body?.adminRemark || "Request rejected by admin.";
+
+    await issueRequest.save();
+
+    res.json({
+      message: "Issue request rejected successfully.",
+      issue: issueRequest
+    });
+  } catch (error) {
+    console.error("Reject issue request error:", error);
+    res.status(500).json({
+      message: "Could not reject this request."
     });
   }
 });

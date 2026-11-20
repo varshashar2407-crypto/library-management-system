@@ -1,0 +1,126 @@
+.admin-books-page .admin-rail-menu a {
+  display: block;
+  padding: 12px 14px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  color: var(--dash-muted);
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.admin-books-page .admin-rail-menu a:hover {
+  color: var(--dash-cream);
+  background: rgba(55, 169, 107, 0.07);
+}
+
+.admin-books-page .admin-rail-menu a.admin-rail-active {
+  border-color: rgba(55, 169, 107, 0.4);
+  background: rgba(55, 169, 107, 0.12);
+  color: #a7e7bd;
+}
+
+.admin-books-page .ab-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-books-page .ab-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 17px;
+  border: 1px solid var(--dash-amber);
+  border-radius: 6px;
+  background: var(--dash-amber);
+  color: #20170e;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.admin-books-page .ab-primary:hover:not(:disabled) {
+  background: #e59b3c;
+}
+
+.admin-books-page button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-books-page button:focus-visible,
+.admin-books-page a:focus-visible {
+  outline: 2px solid var(--dash-amber);
+  outline-offset: 3px;
+}
+
+.admin-books-page .ab-editor {
+  margin-bottom: 22px;
+}
+
+.admin-books-page fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.admin-books-page .ab-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.admin-books-page .ab-form-grid label {
+  display: grid;
+  gap: 9px;
+  min-width: 0;
+  color: var(--dash-muted);
+  font-size: 13px;
+}
+
+.admin-books-page .ab-form-grid input {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--dash-line);
+  border-radius: 6px;
+  background: #141a20;
+  color: var(--dash-cream);
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.admin-books-page .ab-form-grid input:focus {
+  outline: 2px solid var(--dash-green);
+  outline-offset: 2px;
+}
+
+.admin-books-page .ab-form-actions {
+  margin-top: 22px;
+}
+
+.admin-books-page .ab-result-count {
+  margin: 0 0 16px;
+  color: var(--dash-muted);
+  font-size: 12px;
+}
+
+.admin-books-page .admin-table button.ab-delete {
+  border: 1px solid rgba(201, 106, 69, 0.5);
+  background: rgba(201, 106, 69, 0.12);
+  color: #f0c6ae;
+}
+
+.admin-books-page .admin-table button.ab-delete:hover:not(:disabled) {
+  background: rgba(201, 106, 69, 0.25);
+}
+
+@media (max-width: 620px) {
+  .admin-books-page .ab-form-grid {
+    grid-template-columns: 1fr;
+  }
+}

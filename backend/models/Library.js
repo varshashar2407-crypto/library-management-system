@@ -175,6 +175,11 @@ const librarySchema = new mongoose.Schema(
       type: String,
       default: "08:00 PM"
     },
+    admin: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      index: true 
+    },
 
     facilities: [
       {

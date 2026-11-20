@@ -1,3 +1,4 @@
+import Membership from "../models/Membership.js";
 import Book from "../models/Book.js";
 import IssuedBook from "../models/IssuedBook.js";
 import Library from "../models/Library.js";
@@ -47,32 +48,49 @@ export const addBook = async (req, res) => {
 
 export const getBooks = async (req, res) => {
   try {
-    const filter = {};
+    const memberships = await Membership.find({
+      user: req.user._id,
+      status: "active",
+    });
+
+    const joinedLibraryIds = memberships.map(
+      (membership) => membership.library
+    );
+
+    if (joinedLibraryIds.length === 0) {
+      return res.json([]);
+    }
+
+    const filter = {
+      library: { $in: joinedLibraryIds },
+    };
 
     if (req.query.category) {
       filter.category = req.query.category;
     }
 
-    if (req.query.library) {
-      filter.library = req.query.library;
-    }
-
     if (req.query.search) {
-      const searchRegex = new RegExp(req.query.search, "i");
+      const searchRegex = new RegExp(
+        req.query.search,
+        "i"
+      );
+
       filter.$or = [
         { title: searchRegex },
-        { author: searchRegex }
+        { author: searchRegex },
       ];
     }
 
-    const books = await Book.find(filter)
-      .sort({ createdAt: -1 })
-      .populate("library", "name city");
-
+   const books = await Book.find(filter)
+  .sort({ createdAt: -1 })
+  .populate("library", "name address area city pincode");
+   
     res.json(books);
   } catch (error) {
+    console.error("Get books error:", error);
+
     res.status(500).json({
-      message: "Could not load books."
+      message: "Could not load books.",
     });
   }
 };
@@ -157,14 +175,30 @@ export const deleteBook = async (req, res) => {
 
 export const getMyEbooks = async (req, res) => {
   try {
+    const memberships = await Membership.find({
+      user: req.user._id,
+      status: "active",
+    });
+
+    const joinedLibraryIds = memberships.map(
+      (membership) => membership.library
+    );
+
+    if (joinedLibraryIds.length === 0) {
+      return res.json([]);
+    }
+
     const books = await Book.find({
-      selectedBy: req.user._id
+      selectedBy: req.user._id,
+      library: { $in: joinedLibraryIds },
     }).populate("library", "name city");
 
     res.json(books);
   } catch (error) {
+    console.error("Get my ebooks error:", error);
+
     res.status(500).json({
-      message: "Could not load selected ebooks."
+      message: "Could not load selected ebooks.",
     });
   }
 };
@@ -227,61 +261,62 @@ export const issueBook = async (req, res) => {
 
     if (!libraryId) {
       return res.status(400).json({
-        message: "library ID is required."
+        message: "Library ID is required.",
       });
     }
 
-    const book = await Book.findOne(req.params.id);
+    const book = await Book.findOne({
+      _id: req.params.bookId,
+      library: libraryId,
+      availableCopies: { $gt: 0 },
+    });
 
     if (!book) {
       return res.status(404).json({
-        message: "Book is not available in this library."
+        message: "Book is not available in this library.",
       });
-    }
-    if (book.availableCopies<=0){
-      return res.status(404).json ({
-        message: "No copies available right now."
-      })
     }
 
     const alreadyIssued = await IssuedBook.findOne({
       user: req.user._id,
       book: book._id,
       library: libraryId,
-      status: "issued"
+      status: "issued",
     });
 
     if (alreadyIssued) {
       return res.status(400).json({
-        message: "You have already issued this book."
+        message: "You have already issued this book.",
       });
     }
 
-    const dueDate = new Date();
-    dueDate.setDate(dueDate.getDate() + 10);
+    const issueDate = new Date();
+    const dueDate = new Date(issueDate);
+    dueDate.setDate(dueDate.getDate() + ISSUE_DAYS);
 
     const issue = await IssuedBook.create({
       user: req.user._id,
       book: book._id,
       library: libraryId,
-      dueDate,
       status: "issued",
-      issueDate: new Date(),
+      issueDate,
       dueDate,
       reissueCount: 0,
-      fine: 0
+      fine: 0,
     });
-     book.availableCopies -= 1;
+
+    book.availableCopies -= 1;
     await book.save();
 
     res.status(201).json({
       message: "Book issued successfully.",
-      issuedBook
+      issuedBook: issue,
     });
   } catch (error) {
     console.error("Issue book error:", error);
+
     res.status(500).json({
-      message: "Could not issue this book."
+      message: "Could not issue this book.",
     });
   }
 };

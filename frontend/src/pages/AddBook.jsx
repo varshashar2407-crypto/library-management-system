@@ -7,7 +7,12 @@ export default function AddBook() {
     title: "",
     author: "",
     category: "",
-    description: ""
+    description: "",
+    totalCopies: 1,
+    availableCopies: 1,
+    coverImage: "",
+    isEbook: false,
+    ebookUrl: ""
   });
 
   const [message, setMessage] = useState("");
@@ -15,9 +20,11 @@ export default function AddBook() {
   const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (event) => {
+    const { name, value, type, checked } = event.target;
+
     setForm({
       ...form,
-      [event.target.name]: event.target.value
+      [name]: type === "checkbox" ? checked : value
     });
   };
 
@@ -42,7 +49,12 @@ export default function AddBook() {
         title: "",
         author: "",
         category: "",
-        description: ""
+        description: "",
+        totalCopies: 1,
+        availableCopies: 1,
+        coverImage: "",
+        isEbook: false,
+        ebookUrl: ""
       });
     } catch (error) {
       setMessage(
@@ -151,12 +163,48 @@ export default function AddBook() {
               />
             </label>
 
-            <label className="admin-field admin-field-full">
+            <label className="admin-field">
               <span>Category</span>
               <input
                 name="category"
                 placeholder="Fiction, History, Science, etc."
                 value={form.category}
+                onChange={handleChange}
+              />
+            </label>
+
+            <label className="admin-field">
+              <span>Total copies *</span>
+              <input
+                name="totalCopies"
+                type="number"
+                min="1"
+                placeholder="Enter total copies"
+                value={form.totalCopies}
+                onChange={handleChange}
+                required
+              />
+            </label>
+
+            <label className="admin-field">
+              <span>Available copies *</span>
+              <input
+                name="availableCopies"
+                type="number"
+                min="0"
+                placeholder="Enter available copies"
+                value={form.availableCopies}
+                onChange={handleChange}
+                required
+              />
+            </label>
+
+            <label className="admin-field admin-field-full">
+              <span>Cover image URL</span>
+              <input
+                name="coverImage"
+                placeholder="https://example.com/book-cover.jpg"
+                value={form.coverImage}
                 onChange={handleChange}
               />
             </label>
@@ -171,6 +219,33 @@ export default function AddBook() {
                 rows="5"
               />
             </label>
+
+            <label className="admin-field admin-field-full">
+              <span>eBook</span>
+
+              <div className="admin-checkbox">
+                <input
+                  name="isEbook"
+                  type="checkbox"
+                  checked={form.isEbook}
+                  onChange={handleChange}
+                />
+                <span>This book has an eBook</span>
+              </div>
+            </label>
+
+            {form.isEbook && (
+              <label className="admin-field admin-field-full">
+                <span>eBook URL *</span>
+                <input
+                  name="ebookUrl"
+                  placeholder="https://example.com/book.pdf"
+                  value={form.ebookUrl}
+                  onChange={handleChange}
+                  required
+                />
+              </label>
+            )}
           </div>
 
           <div className="admin-form-footer">

@@ -2,10 +2,13 @@ import { useEffect, useState } from "react";
 import api from "../api/axios.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import "./Books.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Books() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [books, setBooks] = useState([]);
+  const [issues, setIssues] = useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [message, setMessage] = useState("");
@@ -16,7 +19,7 @@ export default function Books() {
   const loadBooks = async () => {
     try {
       const { data } = await api.get("/books", {
-        params: { search }
+        params: { search },
       });
 
       setBooks(Array.isArray(data) ? data : []);
@@ -31,46 +34,63 @@ export default function Books() {
     }
   };
 
-  useEffect(() => {
-  let ignore = false;
-
-  const timer = setTimeout(async () => {
+  const loadMyIssues = async () => {
     try {
-      const { data } = await api.get("/books", {
-        params: { search }
-      });
+      const { data } = await api.get("/issues/my");
 
-      if (!ignore) {
-        setBooks(Array.isArray(data) ? data : []);
-        setMessage("");
-      }
+      setIssues(Array.isArray(data) ? data : []);
     } catch (error) {
-      if (!ignore) {
-        setMessage(
-          error.response?.data?.message ||
-            "Books could not be loaded."
-        );
-        setMessageType("error");
-      }
-    } finally {
-      if (!ignore) {
-        setLoading(false);
-      }
+      setIssues([]);
     }
-  }, 400);
-
-  return () => {
-    ignore = true;
-    clearTimeout(timer);
   };
-}, [search]);
+
+  useEffect(() => {
+    let ignore = false;
+
+    const timer = setTimeout(async () => {
+      try {
+        const { data } = await api.get("/books", {
+          params: { search },
+        });
+
+        if (!ignore) {
+          setBooks(Array.isArray(data) ? data : []);
+          setMessage("");
+        }
+      } catch (error) {
+        if (!ignore) {
+          setMessage(
+            error.response?.data?.message ||
+              "Books could not be loaded."
+          );
+          setMessageType("error");
+        }
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
+    }, 400);
+
+    return () => {
+      ignore = true;
+      clearTimeout(timer);
+    };
+  }, [search]);
+
+  useEffect(() => {
+    if (user) {
+      loadMyIssues();
+    }
+  }, [user]);
+
   const categories = [
     "All",
     ...new Set(
       books
         .map((book) => book.category)
         .filter(Boolean)
-    )
+    ),
   ];
 
   const visibleBooks =
@@ -81,47 +101,140 @@ export default function Books() {
             book.category?.toLowerCase() ===
             category.toLowerCase()
         );
-        const issueBook = async (bookId) => {
-  setActionId(bookId);
-  setMessage("");
-  setMessageType("");
 
-  try {
-    const book = books.find((item) => item._id === bookId);
+  const getLibraryId = (book) => {
+    const library = book?.library;
 
-    const libraryId =
-      typeof book?.library === "object"
-        ? book.library._id
-        : book?.library;
+    if (!library) return "";
 
-    if (!libraryId) {
-      setMessage("Library information is missing for this book.");
-      setMessageType("error");
-      return;
+    if (typeof library === "string") {
+      return library;
     }
 
-    const { data } = await api.post(`/books/${bookId}/issue`, {
-      libraryId
-    });
+    return library._id || String(library) || "";
+  };
 
-    setMessage(data.message || "Book issued successfully.");
-    setMessageType("success");
-    loadBooks();
-  } catch (error) {
-    setMessage(
-      error.response?.data?.message || "Cannot issue book."
+  const getBookIssue = (bookId) =>
+    issues.find(
+      (issue) =>
+        (issue.book?._id || issue.book) === bookId &&
+        ["requested", "issued"].includes(issue.status)
     );
+
+  const issueBook = async (bookId) => {
+    setActionId(bookId);
+    setMessage("");
+    setMessageType("");
+
+    try {
+      const book = books.find((item) => item._id === bookId);
+      const libraryId = getLibraryId(book);
+
+      if (!libraryId) {
+        setMessage(
+          "Library information is missing for this book."
+        );
+        setMessageType("error");
+        return;
+      }
+
+      const { data } = await api.post("/issues", {
+        bookId,
+        libraryId,
+      });
+
+      setMessage(
+        data.message || "Issue request sent successfully."
+      );
+      setMessageType("success");
+
+      await loadMyIssues();
+      await loadBooks();
+    } catch (error) {
+      setMessage(
+        error.response?.data?.message ||
+          "Could not send issue request."
+      );
+      setMessageType("error");
+    } finally {
+      setActionId(null);
+    }
+  };
+
+  const returnBook = async (issueId) => {
+    setActionId(issueId);
+    setMessage("");
+    setMessageType("");
+
+    try {
+      const { data } = await api.post(
+        `/issues/${issueId}/return`
+      );
+
+      setMessage(
+        data.message || "Book returned successfully."
+      );
+      setMessageType("success");
+
+      await loadMyIssues();
+      await loadBooks();
+    } catch (error) {
+      setMessage(
+        error.response?.data?.message ||
+          "Could not return this book."
+      );
+      setMessageType("error");
+    } finally {
+      setActionId(null);
+    }
+  };
+
+  const selectEbook = async (bookId) => {
+    setActionId(bookId);
+    setMessage("");
+    setMessageType("");
+
+    try {
+      await api.post(`/books/${bookId}/select`);
+
+      setMessage("Ebook selected successfully.");
+      setMessageType("success");
+      await loadBooks();
+    } catch (error) {
+      setMessage(
+        error.response?.data?.message ||
+          "Could not select ebook."
+      );
+      setMessageType("error");
+    } finally {
+      setActionId(null);
+    }
+  };
+
+  const openEbook = (book) => {
+  const ebookUrl = book.ebookUrl;
+
+  if (!ebookUrl) {
+    setMessage("Ebook link is not available.");
     setMessageType("error");
-  } finally {
-    setActionId(null);
+    return;
   }
+
+  navigate(`/ebook/${book._id}`, {
+    state: {
+      ebookUrl,
+      title: book.title
+    }
+  });
 };
 
   return (
     <main className="books-catalogue">
       <header className="books-hero">
         <div className="books-hero-copy">
-          <p className="books-eyebrow">THE LIBRARY CATALOGUE</p>
+          <p className="books-eyebrow">
+            THE LIBRARY CATALOGUE
+          </p>
 
           <h1>
             Every book,
@@ -130,8 +243,8 @@ export default function Books() {
           </h1>
 
           <p className="books-hero-text">
-            Search the collection, check availability, and issue
-            your next read.
+            Search the collection, request a book, and read
+            after admin approval.
           </p>
         </div>
 
@@ -159,7 +272,9 @@ export default function Books() {
             type="search"
             placeholder="Search by title, author or category"
             value={search}
-            onChange={(event) => setSearch(event.target.value)}
+            onChange={(event) =>
+              setSearch(event.target.value)
+            }
           />
         </div>
 
@@ -184,7 +299,9 @@ export default function Books() {
       {message && (
         <p
           className={`books-message books-message-${messageType}`}
-          role={messageType === "error" ? "alert" : "status"}
+          role={
+            messageType === "error" ? "alert" : "status"
+          }
         >
           {message}
         </p>
@@ -202,7 +319,9 @@ export default function Books() {
             {loading
               ? "LOADING…"
               : `${visibleBooks.length} ${
-                  visibleBooks.length === 1 ? "BOOK" : "BOOKS"
+                  visibleBooks.length === 1
+                    ? "BOOK"
+                    : "BOOKS"
                 }`}
           </span>
         </div>
@@ -218,14 +337,21 @@ export default function Books() {
             <span aria-hidden="true">✧</span>
             <h3>No books found.</h3>
             <p>
-              Try another title, author, category or search term.
+              Try another title, author, category or search
+              term.
             </p>
           </div>
         ) : (
           <div className="books-grid">
             {visibleBooks.map((book) => {
-              const isAvailable = book.availableCopies > 0;
+              const isAvailable =
+                book.availableCopies > 0;
               const isBusy = actionId === book._id;
+              const bookIssue = getBookIssue(book._id);
+              const isRequested =
+                bookIssue?.status === "requested";
+              const isIssued =
+                bookIssue?.status === "issued";
 
               return (
                 <article
@@ -246,11 +372,34 @@ export default function Books() {
                       by {book.author}
                     </p>
 
-                    {book.library?.name && (
+                    <div className="books-library-info">
                       <p className="books-library">
-                        {book.library.name}
+                        Library:{" "}
+                        {book.library?.name ||
+                          "Library name unavailable"}
                       </p>
-                    )}
+
+                      {book.library &&
+                        typeof book.library === "object" && (
+                          <p className="books-library-location">
+                            {[
+                              book.library.address ||
+                                book.library.area,
+                              book.library.city,
+                              book.library.pincode,
+                            ]
+                              .filter(Boolean)
+                              .join(", ")}
+                          </p>
+                        )}
+
+                      <p className="books-library-id">
+                        Library ID:{" "}
+                        {typeof book.library === "string"
+                          ? book.library
+                          : book.library?._id || "Unavailable"}
+                      </p>
+                    </div>
 
                     <span
                       className={
@@ -267,26 +416,79 @@ export default function Books() {
 
                   <div className="books-card-actions">
                     {book.isEbook ? (
+                      isIssued ? (
+                        <>
+                          <button
+                            type="button"
+                            onClick={() => openEbook(book)}
+                          >
+                            Open
+                          </button>
+
+                          <button
+                            type="button"
+                            disabled={isBusy}
+                            onClick={() =>
+                              returnBook(bookIssue._id)
+                            }
+                          >
+                            {isBusy
+                              ? "Returning…"
+                              : "Return"}
+                          </button>
+                        </>
+                      ) : isRequested ? (
+                        <button
+                          type="button"
+                          disabled
+                        >
+                          Request sent
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() =>
+                            issueBook(book._id)
+                          }
+                          disabled={isBusy}
+                        >
+                          {isBusy
+                            ? "Sending request…"
+                            : "Issue"}
+                        </button>
+                      )
+                    ) : isIssued ? (
                       <button
                         type="button"
-                        onClick={() => selectEbook(book._id)}
                         disabled={isBusy}
+                        onClick={() =>
+                          returnBook(bookIssue._id)
+                        }
                       >
                         {isBusy
-                          ? "Selecting…"
-                          : "Select ebook"}
+                          ? "Returning…"
+                          : "Return"}
+                      </button>
+                    ) : isRequested ? (
+                      <button
+                        type="button"
+                        disabled
+                      >
+                        Request sent
                       </button>
                     ) : (
                       <button
                         type="button"
-                        onClick={() => issueBook(book._id)}
+                        onClick={() =>
+                          issueBook(book._id)
+                        }
                         disabled={!isAvailable || isBusy}
                       >
                         {isBusy
-                          ? "Issuing…"
+                          ? "Sending request…"
                           : isAvailable
-                          ? "Issue book"
-                          : "Unavailable"}
+                            ? "Issue"
+                            : "Unavailable"}
                       </button>
                     )}
                   </div>

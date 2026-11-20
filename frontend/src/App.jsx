@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import { useAuth } from "./context/AuthContext.jsx";
@@ -22,12 +22,22 @@ import MyIssuedBooks from "./pages/MyIssuedBooks.jsx";
 import Profile from "./pages/Profile.jsx";
 import AdminRegister from "./pages/AdminRegister";
 import AdminLogin from "./pages/AdminLogin";
+import AdminBooks from "./pages/AdminBooks.jsx";
+import AdminOverview from "./pages/AdminOverview.jsx";
+import EbookReader from "./pages/EbookReader";
+import BookDetails from "./pages/BookDetails.jsx";
+
 function AppContent() {
   const { user } = useAuth();
+  const location = useLocation();
+
+  const isAdminRoute =
+    location.pathname.startsWith("/admin-dashboard") ||
+    location.pathname.startsWith("/admin/");
 
   return (
     <>
-      <Navbar />
+      {!isAdminRoute && <Navbar />}
 
       <Routes>
         {/* Public pages */}
@@ -36,15 +46,78 @@ function AppContent() {
         <Route path="/verify-otp" element={<VerifyOtp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/admin-register" element={<AdminRegister />} />
-        <Route path="/admin-login" element={<AdminLogin />} />
+        <Route path="/ebook/:id" element={<EbookReader />} />
+        <Route
+  path="/book/:id"
+  element={<BookDetails />}
+/>
+        <Route
+  path="/admin/overview"
+  element={
+    <ProtectedRoute>
+      {user?.role === "admin" ? (
+        <AdminOverview />
+      ) : (
+        <Navigate to="/member-dashboard" replace />
+      )}
+    </ProtectedRoute>
+  }
+/>
 
-        {/* Old membership URL redirect */}
+        <Route
+          path="/forgot-password"
+          element={<ForgotPassword />}
+        />
+
+        <Route
+          path="/reset-password"
+          element={<ResetPassword />}
+        />
+
+        <Route
+          path="/admin-register"
+          element={<AdminRegister />}
+        />
+
+        <Route
+          path="/admin-login"
+          element={<AdminLogin />}
+        />
+
+        {/* Admin dashboard */}
+        <Route
+          path="/admin-dashboard"
+          element={
+            <ProtectedRoute>
+              {user?.role === "admin" ? (
+                <AdminDashboard />
+              ) : (
+                <Navigate to="/member-dashboard" replace />
+              )}
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Admin books */}
+        <Route
+          path="/admin/books"
+          element={
+            <ProtectedRoute>
+              {user?.role === "admin" ? (
+                <AdminBooks />
+              ) : (
+                <Navigate to="/member-dashboard" replace />
+              )}
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Old membership URL */}
         <Route
           path="/membership"
-          element={<Navigate to="/my-memberships" replace />}
+          element={
+            <Navigate to="/my-memberships" replace />
+          }
         />
 
         {/* Protected pages */}
@@ -80,15 +153,6 @@ function AppContent() {
           element={
             <ProtectedRoute>
               <AddBook />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/admin-dashboard"
-          element={
-            <ProtectedRoute>
-              <AdminDashboard />
             </ProtectedRoute>
           }
         />
@@ -146,15 +210,13 @@ function AppContent() {
             </ProtectedRoute>
           }
         />
-        
 
-        {/* 404 fallback */}
+        {/* Fallback */}
         <Route path="*" element={<Home />} />
       </Routes>
     </>
-    
   );
-} 
+}
 
 export default function App() {
   return <AppContent />;

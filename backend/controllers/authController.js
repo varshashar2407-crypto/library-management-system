@@ -23,8 +23,8 @@ const getUserResponse = (user) => ({
   city: user.city,
   pincode: user.pincode,
   isVerified: user.isVerified,
+  library: user.library
 });
-
 
 const getValidationMessage = (error) =>
   Object.values(error.errors)
@@ -219,7 +219,6 @@ export const login = async (req, res) => {
 
 
 export const adminRegister = async (req, res) => {
-  console.log("ADMIN_REGISTER_REQ_BODY:", req.body);
 
   let createdAdminId = null;
 
@@ -244,6 +243,7 @@ export const adminRegister = async (req, res) => {
       phone,
       password,
       libraryName,
+      address,
       area,
       state,
       city,
@@ -259,7 +259,7 @@ export const adminRegister = async (req, res) => {
     ) {
       return res.status(400).json({
         message:
-          "Name, email, phone, password, library name, area, state, city and pincode are required.",
+          "Name, email, phone, password, library name, address, area, state, city and pincode are required.",
       });
     }
 
@@ -321,15 +321,18 @@ export const adminRegister = async (req, res) => {
     });
 
 
-    const library = new Library({
-      name: libraryName.trim(),
-      address: address.trim(),
-      area: area.trim(),
-      state: state.trim(),
-      city: city.trim(),
-      pincode: pincode.trim(),
-      admin: admin._id,
-    });
+   const library = new Library({
+  name: libraryName.trim(),
+  address: address.trim(),
+  area: area.trim(),
+  state: state.trim(),
+  city: city.trim(),
+  pincode: pincode.trim(),
+  admin: admin._id
+});
+
+// IMPORTANT: Admin ko apni library link do
+admin.library = library._id;
 
 
     // Validate both documents before saving either one.

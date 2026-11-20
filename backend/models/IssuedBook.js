@@ -22,8 +22,8 @@ const issuedBookSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["issued", "returned"],
-      default: "issued"
+      enum: ["requested", "issued", "returned"],
+      default: "requested"
     },
 
     issueDate: {
@@ -33,7 +33,6 @@ const issuedBookSchema = new mongoose.Schema(
 
     dueDate: {
       type: Date,
-      required: true,
       validate: {
         validator(value) {
           return !this.issueDate || value > this.issueDate;
@@ -56,6 +55,11 @@ const issuedBookSchema = new mongoose.Schema(
       type: Number,
       default: 0,
       min: 0
+    },
+
+    adminRemark: {
+      type: String,
+      default: ""
     }
   },
   {
